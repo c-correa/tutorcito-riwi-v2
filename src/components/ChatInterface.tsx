@@ -15,13 +15,15 @@ interface Message {
 
 interface ChatInterfaceProps {
   onUpdateProgress: (tech: string, points: number) => void;
+  chatHistory: Message[];
+  onSaveChatHistory: (messages: Message[]) => void;
 }
 
-export const ChatInterface = ({ onUpdateProgress }: ChatInterfaceProps) => {
-  const [messages, setMessages] = useState<Message[]>([
+export const ChatInterface = ({ onUpdateProgress, chatHistory, onSaveChatHistory }: ChatInterfaceProps) => {
+  const [messages, setMessages] = useState<Message[]>(chatHistory.length > 0 ? chatHistory : [
     {
       id: "1",
-      content: "¡Hola! Soy tu asistente de aprendizaje de tecnologías web. Puedo ayudarte con HTML, CSS y JavaScript. ¿En qué te gustaría mejorar hoy?",
+      content: "¡Hola! Soy Tutorcito Riwi, tu asistente de aprendizaje de tecnologías web. Puedo ayudarte con HTML, CSS y JavaScript. ¿En qué te gustaría mejorar hoy?",
       sender: "ai",
       timestamp: new Date(),
       technologies: ["html", "css", "js"]
@@ -38,6 +40,10 @@ export const ChatInterface = ({ onUpdateProgress }: ChatInterfaceProps) => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    onSaveChatHistory(messages);
+  }, [messages, onSaveChatHistory]);
 
   const generateAIResponse = (userMessage: string): Message => {
     const lowerMessage = userMessage.toLowerCase();

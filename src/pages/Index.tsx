@@ -19,6 +19,7 @@ const Index = () => {
     css: 15,
     js: 10
   });
+  const [chatHistory, setChatHistory] = useState<any[]>([]);
 
   const handleLogin = (email: string) => {
     setUser({ email, name: email.split("@")[0] });
@@ -78,7 +79,7 @@ const Index = () => {
                 <span className="text-sm font-bold text-primary-foreground">&lt;/&gt;</span>
               </div>
               <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                TechLearn AI
+                Tutorcito Riwi
               </h1>
             </div>
             
@@ -122,7 +123,11 @@ const Index = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <ChatInterface onUpdateProgress={handleUpdateProgress} />
+                <ChatInterface 
+                  onUpdateProgress={handleUpdateProgress} 
+                  chatHistory={chatHistory}
+                  onSaveChatHistory={setChatHistory}
+                />
               </CardContent>
             </Card>
           </TabsContent>

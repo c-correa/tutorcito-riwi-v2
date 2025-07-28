@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Target, Award } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, TrendingDown, Target, Award, Eye } from "lucide-react";
+import { TechModal } from "./TechModal";
 
 interface UserProgress {
   html: number;
@@ -15,6 +18,8 @@ interface DashboardProps {
 }
 
 export const Dashboard = ({ userProgress, userName }: DashboardProps) => {
+  const [selectedTech, setSelectedTech] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const technologies = [
     {
       name: "HTML",
@@ -38,6 +43,11 @@ export const Dashboard = ({ userProgress, userName }: DashboardProps) => {
       description: "Interactividad y lógica"
     }
   ];
+
+  const handleOpenModal = (tech: any) => {
+    setSelectedTech(tech);
+    setIsModalOpen(true);
+  };
 
   const getProgressLevel = (progress: number) => {
     if (progress >= 80) return { level: "Avanzado", color: "success" };
@@ -133,6 +143,15 @@ export const Dashboard = ({ userProgress, userName }: DashboardProps) => {
                     }`}
                   />
                 </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => handleOpenModal(tech)}
+                  className="w-full mt-3 gap-2"
+                >
+                  <Eye className="w-4 h-4" />
+                  Ver Detalles
+                </Button>
               </CardContent>
             </Card>
           );
@@ -221,6 +240,16 @@ export const Dashboard = ({ userProgress, userName }: DashboardProps) => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Tech Modal */}
+      {selectedTech && (
+        <TechModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          technology={selectedTech}
+          progress={userProgress[selectedTech.key]}
+        />
+      )}
     </div>
   );
 };
